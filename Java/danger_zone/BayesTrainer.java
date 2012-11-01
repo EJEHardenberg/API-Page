@@ -61,6 +61,8 @@ public class BayesTrainer{
 		//match what the bayes returns. Return a percentage of correctness
 		int total = set.size();
 		int correct = 0;
+		int false_positives = 0;
+		int false_negatives = 0;
 		Training_Tweet t = set.get(0);
 		for(int s = 1; s < total && t != null; s++){
 			
@@ -68,9 +70,17 @@ public class BayesTrainer{
 			int guess = bayes.classify(t.getTweetText());
 			if(c == guess){
 				correct = correct + 1;
+			}else if(c == NaiveBayes.CAT_SAFE){
+				false_negatives++;
+			}else{
+				false_positives++;
 			}
 			t = set.get(s);
 		}
+		System.out.println("Correct: "+ correct);
+		System.out.println("Incorrect: "+ (total - correct));
+		System.out.println("False Positives: " + false_positives);
+		System.out.println("False Negatives: " + false_negatives);
 		
 		return correct/(float)total;
 	}
@@ -134,15 +144,26 @@ public class BayesTrainer{
 	*Runs the BayesTrainer, iniatlizes the database and then trains the bayes on it.
 	*TODO: Make it wait around and classify everything for us via some server socket interactions
 	*/
+	public void run(String password,String opt){
+		//Create the DataSet
+		initializeData(password);
+		//Begin Training the data on everything in the dataset
+		switch(opt){
+			case "-x":
+				crossValidation();
+				break;
+			default:
+				trainBayes();
+				System.out.println(validateOn());		
+				break;
+		}
+	}
 	public void run(String password){
 		//Create the DataSet
 		initializeData(password);
 		//Begin Training the data on everything in the dataset
-		//crossValidation();
 		trainBayes();
-		System.out.println(validateOn());
-
-
+		System.out.println(validateOn());		
 	}
 
 	public static void main(String[] args) {
@@ -153,7 +174,13 @@ public class BayesTrainer{
 		}
 
 		BayesTrainer bt = new BayesTrainer();
-		bt.run(args[0]);
+
+		if(args.length > 1){
+			bt.run(args[0], args[1]);
+		}else{
+			bt.run(args[0]);	
+		}
+		
 		
 	}
 

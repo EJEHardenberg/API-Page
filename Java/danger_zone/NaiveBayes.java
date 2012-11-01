@@ -47,19 +47,9 @@ public class NaiveBayes{
 	private int total_training_size = 0;
 
 	/**
-	*Weight on how much each word in a tweet affects the total probabiliy:
-	*/
-	private float weight = (float)1.00;
-
-	/**
-	*Assumed probability of the word being in any given category.
-	*/
-	private double assumed_prob = 0.6;
-
-	/**
 	*Threshold value to allow false positives
 	*/
-	private float threshold = (float)0.1;
+	private float threshold = (float)0.000000005;
 
 	public NaiveBayes(){
 		HashMap<String,Integer> danger = new HashMap<String,Integer>();
@@ -121,76 +111,40 @@ public class NaiveBayes{
 		//Each word is classified indenpendtly, whichever one has the most wins. 
 		String [] parsedTweet = tweetStripper.parseTweet(tweet).split(" ");
 
-		//Compute the leading term of category probability:
-		float[] catProb = new float[categories.length];
-		int i = 0;
+		//Compute: Prob(C) * Prob(Ti|Ci)
+		//Prob(C) = fraction of documents in training set that are of category C
+		//Prob(Ti|C) = # occurences of Ti in C / total # words in C
+
+		//Find Prob C, the leading term of the expression
+		HashMap<Integer, Double> probC = new HashMap<Integer,Double>();
 		for(int cat : categories){
-			catProb[i] = category_count.get(cat).size()/(float)total_training_size;
-			i++;
+			probC.put(cat, category_count.get(cat).size() / (double) total_training_size );
 		}
 
-		//Compute the number of times a word appears in all categories:
-		HashMap<String, Integer> total_all_classes = new HashMap<String, Integer>();
-		for(String pt : parsedTweet){
-			for(int cat : categories){
-				if(!total_all_classes.containsKey(pt)){
-					if(category_count.get(cat).containsKey(pt)){
-						total_all_classes.put(pt,category_count.get(cat).get(pt));
-					}else{
-						//What happens if we've never seen the word before?
-					}
-				}else{
-					//If we've seen the word before:
-					if(category_count.get(cat).containsKey(pt)){
-						int additional = total_all_classes.get(pt) + category_count.get(cat).get(pt);
-						total_all_classes.put(pt, additional);
-					}else{
-						//I'm skeptical if this will ever be execuated, but what happens if we've never seen the word before?
-					}
-				}
-			}
-		}
-
-		//Create something to hold the probabilities in
-		float[] class_probability = new float[categories.length];
-		//Initalize:
-		for(int c = 0; c < categories.length; c++){
-			class_probability[c] = 1;
-		}
-
-		//Compute the prodcut of the toals with priors and weights and assumed prob.
-		//product of ( #word appears in all class * (#word appears in class c/#words in class c) )+ weight*assumed probability all divided by weight + #words appeared in all classes
+		//Find the running product of the words. 
 		for(int cat : categories){
 			for(String pt : parsedTweet){
-				if(category_count.get(cat).containsKey(pt) && total_all_classes.containsKey(pt)){ 
-					//This is going to be a terribly long expression sadly.
-					class_probability[cat] *= ((total_all_classes.get(pt)*(category_count.get(cat).get(pt)/(float)category_count.get(cat).size())) + weight*assumed_prob)/(float)(weight + total_all_classes.get(pt));
-				}
+				if(category_count.get(cat).containsKey(pt)){
+					double prob = probC.get(cat);
+					prob *= category_count.get(cat).get(pt)/(double)category_count.get(cat).size();
+					probC.put(cat,prob);
+				}	
 			}
 		}
 
-		//Multiply the whole term by the leading term of catProb:
+		//Compute the best 
+		int bestCat = DEFAULT_CATEGORY;
+		double bestFit = -1;
 		for(int cat : categories){
-			class_probability[cat]  = catProb[cat]*class_probability[cat];
-		}
-
-		//Figure out which class/category is the highest and return the best fitting one.
-		int bestFit = CAT_SAFE; //If can't figure, return that its SAFE? Dunno if this is the best choice
-		float bestProb = -1;
-		for(int cat : categories){
-			if(class_probability[cat] > bestProb){
+			if(probC.get(cat) > bestFit){
 				bestFit = cat;
 			}
-			System.out.println(class_probability[cat]);
 		}
-		System.out.println(bestProb < threshold);
-		if(bestProb < threshold){
+		if(threshold > bestFit){
 			bestFit = DEFAULT_CATEGORY;
 		}
 
-
-
-		return bestFit;
+		return bestCat;
 
 	}
 
