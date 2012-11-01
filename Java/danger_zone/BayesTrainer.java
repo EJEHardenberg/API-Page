@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
 *@author Ethan Eldridge <ejayeldridge @ gmail.com>
-*@version 0.0
+*@version 0.1
 *@since 2012-10-28
 *
 * Class to overview the training of the Naive Bayes Algorithm from the Dataset.

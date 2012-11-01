@@ -11,7 +11,7 @@ import java.lang.Math;
 /**
 *@author Ethan Eldridge <ejayeldridge @ gmail.com>
 *@author Garth Fritz <gfritz @ uvm.edu>
-*@version 0.0
+*@version 0.1
 *@since 2012-10-2
 *
 * The DangerNode class is a node of a K-d Tree of dimensionality 2. It contains an id for reference to an outside database as well as
