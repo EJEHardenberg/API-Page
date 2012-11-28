@@ -65,6 +65,7 @@ public class NaiveBayes{
 			catMap = new HashMap<String,Integer>();
 			category_count.put(cat,catMap);
 		}
+		System.out.println(category_count);
 
 	}
 
