@@ -27,6 +27,11 @@ public class BayesTrainer{
 	private DataSet data = new DataSet();
 
 	/**
+	*The dataset to use to train the specific subcategory database monstrosity
+	*/
+	private DataSet specificData = new DataSet();
+
+	/**
 	*Initalizes the dataset, if a connection cannot be made the function returns false.
 	*@param password The password to connect to the database.
 	*@return returns true or false depending on whether the dataset is able to connect to the database.
@@ -43,6 +48,17 @@ public class BayesTrainer{
 			System.out.println(e.getStackTrace());
 			return false;
 		}
+		try{
+			//Open the specific the database
+			boolean initialized = specificData.initialize(password);
+			if(!initialized){
+				return false;
+			}
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace());
+			return false;	
+		}
 		return true;
 	}
 
@@ -50,12 +66,20 @@ public class BayesTrainer{
 	*Trains the naive bayes on the entire data set.
 	*/
 	public void trainBayes(){
+		//Train the outer bayes
 		Training_Tweet tweet = (Training_Tweet)data.getNext();
 		int maxTrainOn = data.size() - data.size()/10;
 		for( int k = 0; k < maxTrainOn && tweet != null; k++){
 			//Train based on the bit
 			bayes.train(tweet.getCategory(),tweet.getTweetText());
 			tweet = (Training_Tweet)data.getNext();
+		}
+		//Train the inner sub cat bayes
+		tweet = (Training_Tweet)specificData.getNext();
+		maxTrainOn = specificData.size() - data.size()/10;
+		for(int k =0; k < maxTrainOn && tweet != null; k++){
+			specific.train(tweet.getCategory(),tweet.getTweetText());
+			tweet = (Training_Tweet)specificData.getNext();
 		}
 	}
 
@@ -65,6 +89,10 @@ public class BayesTrainer{
 	*/
 	public int classify(String tweet){
 		return bayes.classify(tweet);
+	}
+
+	public int classifyDanger(String tweet){
+		return specific.classify(tweet);
 	}
 
 	/**

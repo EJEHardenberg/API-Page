@@ -86,8 +86,16 @@ public abstract class DangerControl{
 				return "D";
 			case NaiveBayes.CAT_SAFE:
 				return "S";
+			case SubCategories.UNCLASSIFIED:
+				return "UNCLASSIFIED DANGER";
+			case SubCategories.WEATHER:
+				return "WEATHER DANGER";
+			case SubCategories.VIOLENCE:
+				return "VIOLENCE DANGER";
+			case SubCategories.ACCIDENT:
+				return "ACCIDENT DANGER";
 			default:
-				return "";
+				return "Ill Formed Request";
 		}
 	}
 }

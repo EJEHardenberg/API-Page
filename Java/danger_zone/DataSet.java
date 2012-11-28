@@ -73,6 +73,13 @@ public class DataSet{
 		return query.getResultSet();
 	}
 
+
+	public ResultSet getSpecificData() throws Exception{
+		Statement query = con.createStatement();
+		query.executeQuery("SELECT * FROM tbl_tweet WHERE sub_danger != null;");
+		return query.getResultSet();
+	}
+
 	/**
 	*This function commits data the naive bayes has been training on to the database so we can rebuild the bayes at anytime.
 	*@param cat category used by the bayes that the text belongs to
@@ -146,6 +153,8 @@ public class DataSet{
 				int id = results.getInt(1);
 				String text = results.getString(2);				
 				int category = results.getInt(3);
+				//Figure out if subcategoriz
+
 				dataset.add(new Training_Tweet((int)id, text, category));
 			}
 		}catch(java.sql.SQLException jSQL){
@@ -159,8 +168,31 @@ public class DataSet{
 		dataIter = dataset.iterator();
 	}
 
-	public void addTweet(String id, String nuId, String lat, String lon, String text, String created, String somethingelseishouldcontinueherelateron ){
+	/**
+	*Constructs the training set from the sub categories
+	*@param results the ResultSet from querying the database
+	*/
+	public void constructSpecificData(ResultSet results) throws Exception{
+		try{
+			while(results.next()){
 
+				long id = Long.parseLong(results.getString(1));
+				String text = results.getString(5);
+
+				int category = results.getInt(9);
+				//Figure out if subcategoriz
+
+				dataset.add(new Training_Tweet((int)id, text, category));
+			}
+		}catch(java.sql.SQLException jSQL){
+			//Do nothing
+			System.out.println(jSQL.getMessage());
+			System.out.println(jSQL.getStackTrace());
+		}finally{
+			//Cut off the results connection
+			results.close();
+		}
+		dataIter = dataset.iterator();	
 	}
 
 

@@ -203,7 +203,8 @@ public class DangerControlUDP  extends DangerControl{
 					}else if(cat.equals("S")){
 						this.dispatchClassResponse("Safe",request);
 					}else{
-						this.dispatchClassResponse("Ill formed request",request);
+						//Ill formed requests and sub cats
+						this.dispatchClassResponse(cat,request);
 					}
 				}catch(Exception e){
 					System.out.println("Error handling Classification Command: \"" + line + "\" is not properly formed");
