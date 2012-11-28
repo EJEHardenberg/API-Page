@@ -185,7 +185,7 @@ public class DangerControlTCP extends DangerControl{
 				long_timeout = 0;
 			}else if(line.indexOf(CommandParser.CMD_CLASSIFY)!=-1){
 				//Handle the classification
-				String cat = this.handleClassify(CommandParser.parseClassifyCommand(line));
+				String cat = this.handleClassify( classifier.classify( CommandParser.parseClassifyCommand(line)));
 				try{ 	
 					if(cat.equals("D")){
 						this.dispatchClassResponse("Dangerous",request);

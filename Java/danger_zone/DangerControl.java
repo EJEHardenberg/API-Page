@@ -79,8 +79,8 @@ public abstract class DangerControl{
 	*@param line The line to be classified
 	*@result Returns a D or S depending on the category the line is classified into, or an empty string if the category is not recognized.
 	*/
-	public String handleClassify(String line){
-		int cat = classifier.classify(line);
+	public String handleClassify(int cat){
+		
 		switch(cat){
 			case NaiveBayes.CAT_DANGER:
 				return "D";
@@ -98,4 +98,5 @@ public abstract class DangerControl{
 				return "Ill Formed Request";
 		}
 	}
+
 }

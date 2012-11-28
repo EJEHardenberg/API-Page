@@ -196,10 +196,12 @@ public class DangerControlUDP  extends DangerControl{
 				long_timeout = 0;
 			}else if(line.indexOf(CommandParser.CMD_CLASSIFY)!=-1){
 				//Handle the classification
-				String cat = this.handleClassify(CommandParser.parseClassifyCommand(line));
+				String text  = CommandParser.parseClassifyCommand(line);
+				String cat = this.handleClassify(classifier.classify(text));
 				try{ 	
 					if(cat.equals("D")){
-						this.dispatchClassResponse("Dangerous",request);
+						//Second classifer it!
+						this.dispatchClassResponse(this.handleClassify(classifier.classifyDanger(text)),request);
 					}else if(cat.equals("S")){
 						this.dispatchClassResponse("Safe",request);
 					}else{
