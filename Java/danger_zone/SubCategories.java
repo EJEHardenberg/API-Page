@@ -11,12 +11,12 @@ public class SubCategories{
 	/**
 	*Static constant for sub category for unclassified
 	*/
-	public static final int UNCLASSIFIED = 0;
+	public static final int UNCLASSIFIED = 4;
 
 	/**
 	*Static constant for sub category for Weather
 	*/
-	public static final int WEATHER = 1;
+	public static final int WEATHER = 5;
 
 	/**
 	*Static constant for sub category for VIOLENCE
