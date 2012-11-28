@@ -29,7 +29,10 @@ public class BayesTrainer{
 	public boolean initializeData(String password){
 		try{
 			//Open the connection to the database
-			data.initialize(password);
+			boolean initialized = data.initialize(password);
+			if(!initialized){
+				return false;
+			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 			System.out.println(e.getStackTrace());
@@ -49,6 +52,47 @@ public class BayesTrainer{
 			bayes.train(tweet.getCategory(),tweet.getTweetText());
 			tweet = (Training_Tweet)data.getNext();
 		}
+	}
+
+	/**
+	*Trains the bayes on the tweet text.
+	*@param tweet The tweet string to be trained upon.
+	*/
+	public int classify(String tweet){
+		return bayes.classify(tweet);
+	}
+
+	/**
+	*Trains the bayes on just text and category versus on a tweet.
+	*@param text The text to be trained upon
+	*@param cat The category the text belongs to true or false whether or not 
+	*@return Returns true or false if the training was commited to the database.
+	*/
+	public boolean trainOnText(String text, int cat){
+		//make a dummy tweet
+		boolean valid = false;
+		for(int acat : NaiveBayes.categories){
+			if(cat == acat){
+				valid = true;
+			}
+		}
+		//We will not accept weird categories.
+		if(!valid){return false;}
+		//Train the bayes
+		bayes.train(cat,text);
+		//commit the changes to the database so we can preserve our smartness
+		return commitTrain(text,cat);
+
+	}
+
+	/**
+	*Commits the text and category to the database that the naive bayes will train from. Without the training data being specifically a tweet.
+	*@param text the text to train on
+	*@param cat the category to classify the text into.
+	*@return true if the data was commited to the database
+	*/
+	public boolean commitTrain(String text, int cat){
+		return data.sendTrainingData(cat,text);
 	}
 
 	/**
@@ -134,12 +178,50 @@ public class BayesTrainer{
 				}
 			}
 			//Validate:
-			System.out.println(validateOn(validSet));
+			//System.out.println(validateOn(validSet));
 		}
 
 
 	}
 
+	/**
+	*Runs the BayesTrainer, iniatlizes the database and then trains the bayes on it.
+	*TODO: Make it wait around and classify everything for us via some server socket interactions
+	*/
+	public void run(String password,boolean debugOn){
+		//Create the DataSet
+		if(!initializeData(password)){
+			System.out.println("Failed to Initalize Data Set for Classifier");
+			return;
+		}
+		//Begin Training the data on everything in the dataset
+		//crossValidation();
+		trainBayes();
+		if(debugOn){ 
+			System.out.println(validateOn());
+		}
+
+
+	}
+
+	/**
+	*Closes the connection to the DataSet
+	*/
+	public void close(){
+		data.close();
+	}
+
+	public static void main(String[] args) {
+		//Command line parameter of password
+		if(args.length < 1){
+			System.out.println("Required parameter: Password");
+			System.exit(1);
+		}
+
+		BayesTrainer bt = new BayesTrainer();
+		bt.run(args[0],true);
+		
+	}
 
 
 
