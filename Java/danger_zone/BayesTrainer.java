@@ -140,49 +140,6 @@ public class BayesTrainer{
 
 	}
 
-	/**
-	*Runs the BayesTrainer, iniatlizes the database and then trains the bayes on it.
-	*TODO: Make it wait around and classify everything for us via some server socket interactions
-	*/
-	public void run(String password,String opt){
-		//Create the DataSet
-		initializeData(password);
-		//Begin Training the data on everything in the dataset
-		switch(opt){
-			case "-x":
-				crossValidation();
-				break;
-			default:
-				trainBayes();
-				System.out.println(validateOn());		
-				break;
-		}
-	}
-	public void run(String password){
-		//Create the DataSet
-		initializeData(password);
-		//Begin Training the data on everything in the dataset
-		trainBayes();
-		System.out.println(validateOn());		
-	}
-
-	public static void main(String[] args) {
-		//Command line parameter of password
-		if(args.length < 1){
-			System.out.println("Required parameter: Password");
-			System.exit(1);
-		}
-
-		BayesTrainer bt = new BayesTrainer();
-
-		if(args.length > 1){
-			bt.run(args[0], args[1]);
-		}else{
-			bt.run(args[0]);	
-		}
-		
-		
-	}
 
 
 
