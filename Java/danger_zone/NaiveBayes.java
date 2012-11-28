@@ -58,9 +58,14 @@ public class NaiveBayes{
 		category_count.put(CAT_SAFE, safe);
 	}
 
-	public NaiveBayes(HashMap<Integer, HashMap<String,Integer>> catMaps, int [] categories){
-		categories = categories;
-		category_count = catMaps;
+	public NaiveBayes(int [] categorys){
+		HashMap<String,Integer> catMap; 
+		this.categories = categorys;
+		for(int cat : categories){ 
+			catMap = new HashMap<String,Integer>();
+			category_count.put(cat,catMap);
+		}
+
 	}
 
 	/**
