@@ -82,6 +82,7 @@ public class NaiveBayes{
 
 		//Associate these words with the category
 		for(String pt : parsedTweet){
+			System.out.println("CATEGORY" + category);
 			if(!category_count.get(category).containsKey(pt)){
 				category_count.get(category).put(pt,1);
 			}
