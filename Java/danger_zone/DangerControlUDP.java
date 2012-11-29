@@ -285,7 +285,7 @@ public class DangerControlUDP  extends DangerControl{
 	    InetAddress clientHost = request.getAddress();
 	    int clientPort = request.getPort();
 	    try{
-	    	byte[] buf = (response.toString()).getBytes("utf-8");
+	    	byte[] buf = (neighbors.toString()).getBytes("utf-8");
 		
 	    DatagramPacket reply = new DatagramPacket(buf, buf.length, clientHost, clientPort);
 	    try{ 
