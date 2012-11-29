@@ -287,6 +287,7 @@ public class DangerControlUDP  extends DangerControl{
 	    DatagramPacket reply = new DatagramPacket(buf, buf.length, clientHost, clientPort);
 	    try{ 
 	 	   clientListener.send(reply);
+	 	   System.out.println("Sending Neighbors Back");
 		}catch (Exception e) {
 			System.out.println("could not send response to client");
 			System.out.println("Exception: " + e.getMessage());
