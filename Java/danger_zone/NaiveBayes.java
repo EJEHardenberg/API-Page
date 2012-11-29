@@ -21,7 +21,7 @@ public class NaiveBayes{
 	/**
 	*Default for a tweet that's probability falls beneath the threshold.
 	*/
-	public static final int DEFAULT_CATEGORY = CAT_DANGER;
+	public  int DEFAULT_CATEGORY = CAT_DANGER;
 	/**
 	*Lemmatizer instance to strip and parse tweets into a managable form.
 	*/
@@ -58,7 +58,8 @@ public class NaiveBayes{
 		category_count.put(CAT_SAFE, safe);
 	}
 
-	public NaiveBayes(int [] categorys){
+	public NaiveBayes(int [] categorys,int defaultCat){
+		DEFAULT_CATEGORY = defaultCat;
 		HashMap<String,Integer> catMap; 
 		this.categories = categorys;
 		for(int cat : categories){ 
@@ -129,7 +130,6 @@ public class NaiveBayes{
 		//Find Prob C, the leading term of the expression
 		HashMap<Integer, Double> probC = new HashMap<Integer,Double>();
 		for(int cat : categories){
-			System.out.println("CAT" + cat);
 			
 			probC.put(cat, category_count.get(cat).size() / (double) total_training_size );
 		}

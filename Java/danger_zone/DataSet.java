@@ -94,8 +94,6 @@ public class DataSet{
 			PreparedStatement query = con.prepareStatement("insert into online_training  (cat, traintext) values (?,?);");
 			query.setInt(1,cat);
 			query.setString(2,text);
-			System.out.println("CAT: " + cat);
-			System.out.println("TEXT: " + text);
 			query.executeUpdate();
 			query.close();
 			

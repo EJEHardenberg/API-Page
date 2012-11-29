@@ -241,7 +241,7 @@ public class DangerControlUDP  extends DangerControl{
 		response.put("Response", responseString);
 		InetAddress clientHost = request.getAddress();
 		int clientPort = request.getPort();
-		byte[] buf = (response.toString() + "\0").getBytes();
+		byte[] buf = (response.toString()).getBytes();
 	    DatagramPacket reply = new DatagramPacket(buf, buf.length, clientHost, clientPort);
 	    try{
 	    	clientListener.send(reply);
@@ -262,7 +262,7 @@ public class DangerControlUDP  extends DangerControl{
 		response.put("Response", responseString);
 		InetAddress clientHost = request.getAddress();
 		int clientPort = request.getPort();
-		byte[] buf = (response.toString() + "\0").getBytes();
+		byte[] buf = (response.toString()).getBytes();
 	    DatagramPacket reply = new DatagramPacket(buf, buf.length, clientHost, clientPort);
 	    try{ 
 	 	   clientListener.send(reply);

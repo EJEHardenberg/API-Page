@@ -19,7 +19,7 @@ public class BayesTrainer{
 	/**
 	*Category specifier
 	*/
-	private NaiveBayes specific = new NaiveBayes(new int[] {SubCategories.UNCLASSIFIED,SubCategories.WEATHER,SubCategories.VIOLENCE,SubCategories.ACCIDENT});
+	private NaiveBayes specific = new NaiveBayes(new int[] {SubCategories.UNCLASSIFIED,SubCategories.WEATHER,SubCategories.VIOLENCE,SubCategories.ACCIDENT},SubCategories.UNCLASSIFIED);
 
 	/**
 	*The Dataset to use to train the NaiveBayes instance
