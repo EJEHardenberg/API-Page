@@ -129,6 +129,8 @@ public class NaiveBayes{
 		//Find Prob C, the leading term of the expression
 		HashMap<Integer, Double> probC = new HashMap<Integer,Double>();
 		for(int cat : categories){
+			System.out.println("CAT" + cat);
+			
 			probC.put(cat, category_count.get(cat).size() / (double) total_training_size );
 		}
 
