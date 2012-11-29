@@ -283,7 +283,9 @@ public class DangerControlUDP  extends DangerControl{
 		// Send reply.
 	    InetAddress clientHost = request.getAddress();
 	    int clientPort = request.getPort();
-	    byte[] buf = (response.toString()).getBytes("utf-8");
+	    try{
+	    	byte[] buf = (response.toString()).getBytes("utf-8");
+		
 	    DatagramPacket reply = new DatagramPacket(buf, buf.length, clientHost, clientPort);
 	    try{ 
 	 	   clientListener.send(reply);
@@ -293,6 +295,9 @@ public class DangerControlUDP  extends DangerControl{
 			System.out.println("could not send response to client");
 			System.out.println("Exception: " + e.getMessage());
 		}
+	}catch(Exception e){
+		System.out.println("Exception in encoding");
+	}
 	}
 
 	
