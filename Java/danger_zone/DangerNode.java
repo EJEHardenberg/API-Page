@@ -403,7 +403,7 @@ public class DangerNode{
 	*Returns the longitude, latitude and id of the DangerNode
 	*/
 	public String toString() {
-		return "(" + getLongitude() + "," + getLatitude() + ")  id: " + getID();
+		return "id :" + getID();
 	}
 
 	/**

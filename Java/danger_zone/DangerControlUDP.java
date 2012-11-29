@@ -279,7 +279,7 @@ public class DangerControlUDP  extends DangerControl{
 	public void dispatchResponse(Stack<DangerNode> neighbors,DatagramPacket request){
 		//Lets send the response as a json array of the nodes
 		JSONObject response = new JSONObject();
-		response.put("neighbors", neighbors.toArray());
+		response.put("neighbors", neighbors);
 		// Send reply.
 	    InetAddress clientHost = request.getAddress();
 	    int clientPort = request.getPort();
