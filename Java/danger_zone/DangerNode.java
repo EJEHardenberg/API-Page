@@ -25,7 +25,7 @@ public class DangerNode{
 	private final float LONG_DUMMY = 200.0f;
 
 	private static int numNodes = 0;
-
+	private nodeNumber = -1;
 	/**
 	*Identifier corresponding to an integer database key.
 	*/
@@ -57,6 +57,7 @@ public class DangerNode{
 		this.right = null;
 		this.coordinates[0] = 100.0f;
 		this.coordinates[1] = 200.0f;
+		nodeNumber = numNodes;
 		numNodes++;
 	}
 
@@ -97,6 +98,7 @@ public class DangerNode{
 		this.coordinates[1] = latitude;
 		this.left = lChild;
 		this.right = rChild;
+		nodeNumber = numNodes;
 		numNodes++;
 	}
 
@@ -407,7 +409,7 @@ public class DangerNode{
 	*Returns the longitude, latitude and id of the DangerNode
 	*/
 	public String toString() {
-		return "\"id" + numNodes + "\" :" + getID();
+		return "\"id" + nodeNumber + "\" :" + getID();
 	}
 
 	/**
