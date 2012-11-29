@@ -8,7 +8,7 @@ import java.util.List;
 *@version 0.1
 *@since 2012-10-28
 *
-* Class to overview the training of the Naive Bayes Algorithm from the Dataset.
+* Class to overview the training of the Naive Bayes Algorithm from the Dataset. //
 */
 public class BayesTrainer{
 	/**
