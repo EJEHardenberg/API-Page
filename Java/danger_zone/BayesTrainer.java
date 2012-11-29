@@ -95,6 +95,10 @@ public class BayesTrainer{
 		return specific.classify(tweet);
 	}
 
+	public String [] arr(){
+		return specific.categories;
+	}
+
 	/**
 	*Trains the bayes on just text and category versus on a tweet.
 	*@param text The text to be trained upon

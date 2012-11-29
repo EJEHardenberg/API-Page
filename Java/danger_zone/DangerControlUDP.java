@@ -201,6 +201,7 @@ public class DangerControlUDP  extends DangerControl{
 				try{ 	
 					if(cat.equals("D")){
 						//Second classifer it!
+						System.out.println(BayesTrainer.arr());
 						this.dispatchClassResponse(this.handleClassify(classifier.classifyDanger(text)),request);
 					}else if(cat.equals("S")){
 						this.dispatchClassResponse("Safe",request);
