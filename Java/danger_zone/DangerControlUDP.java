@@ -201,7 +201,6 @@ public class DangerControlUDP  extends DangerControl{
 				try{ 	
 					if(cat.equals("D")){
 						//Second classifer it!
-						for(int i : classifier.arr()){	System.out.println("SC: "+i); }
 						this.dispatchClassResponse(this.handleClassify(classifier.classifyDanger(text)),request);
 					}else if(cat.equals("S")){
 						this.dispatchClassResponse("Safe",request);
