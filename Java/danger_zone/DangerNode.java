@@ -25,7 +25,7 @@ public class DangerNode{
 	private final float LONG_DUMMY = 200.0f;
 
 	private static int numNodes = 0;
-	private nodeNumber = -1;
+	private int nodeNumber = -1;
 	/**
 	*Identifier corresponding to an integer database key.
 	*/
