@@ -8,7 +8,7 @@ import java.util.List;
 *@version 0.1
 *@since 2012-10-28
 *
-* Class to overview the training of the Naive Bayes Algorithm from the Dataset.
+* Class to overview the training of the Naive Bayes Algorithm from the Dataset. //
 */
 public class BayesTrainer{
 	/**
@@ -50,7 +50,7 @@ public class BayesTrainer{
 		}
 		try{
 			//Open the specific the database
-			boolean initialized = specificData.initialize(password);
+			boolean initialized = specificData.initializeSpecific(password);
 			if(!initialized){
 				return false;
 			}
@@ -108,7 +108,7 @@ public class BayesTrainer{
 	public boolean trainOnText(String text, int cat){
 		//make a dummy tweet
 		boolean valid = false;
-		for(int acat : NaiveBayes.categories){
+		for(int acat : bayes.categories){
 			if(cat == acat){
 				valid = true;
 			}

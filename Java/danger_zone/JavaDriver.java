@@ -95,7 +95,9 @@ public class JavaDriver{
 		}catch(Exception e){
 			System.out.println("ERROR");
 			System.out.println(e.getMessage());
-			System.out.println(e.getStackTrace());
+			for(StackTraceElement element : e.getStackTrace()){
+				System.out.println("Trace: " + element.toString());
+			}
 			return;
 		}
 	}

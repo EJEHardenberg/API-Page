@@ -220,6 +220,25 @@ public class DataSet{
 		return true;
 	}
 
+	public boolean initializeSpecific(String password) throws Exception{
+		try{
+			con = openConnection(password);
+			System.out.println("Connecting to Specifics");
+			ResultSet data = getSpecificData();
+			System.out.println("Collected Specific Data");
+			constructSpecificData(data);
+			System.out.println("Created Dataset");
+			close();
+			System.out.println("Disconnected Dataset");
+		}catch(Exception e){
+			System.out.println("Exception: ");
+			System.out.println(e.getStackTrace() + " " + e.getMessage());
+			return false;
+		}
+		return true;
+	}
+
+
 	/**
 	*Gets the next tweet in the dataset. If run out, we return null and recreate the iterator.
 	*@return the next Tweet in this dataset.

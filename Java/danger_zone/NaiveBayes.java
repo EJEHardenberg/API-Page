@@ -29,7 +29,7 @@ public class NaiveBayes{
 	/**
 	*Helper array to make the classifying function easier
 	*/
-	public static  int [] categories = {CAT_SAFE,CAT_DANGER};
+	public int [] categories = {CAT_SAFE,CAT_DANGER};
 
 	/**
 	*Holds The two categories of the data being classified, and number of times a given String appears
@@ -65,6 +65,7 @@ public class NaiveBayes{
 			catMap = new HashMap<String,Integer>();
 			category_count.put(cat,catMap);
 		}
+		
 
 	}
 
@@ -128,6 +129,8 @@ public class NaiveBayes{
 		//Find Prob C, the leading term of the expression
 		HashMap<Integer, Double> probC = new HashMap<Integer,Double>();
 		for(int cat : categories){
+			System.out.println("CAT" + cat);
+			
 			probC.put(cat, category_count.get(cat).size() / (double) total_training_size );
 		}
 
