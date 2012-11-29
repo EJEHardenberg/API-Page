@@ -104,7 +104,7 @@ public class BayesTrainer{
 	public boolean trainOnText(String text, int cat){
 		//make a dummy tweet
 		boolean valid = false;
-		for(int acat : NaiveBayes.categories){
+		for(int acat : bayes.categories){
 			if(cat == acat){
 				valid = true;
 			}

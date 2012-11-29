@@ -29,7 +29,7 @@ public class NaiveBayes{
 	/**
 	*Helper array to make the classifying function easier
 	*/
-	public static  int [] categories = {CAT_SAFE,CAT_DANGER};
+	public int [] categories = {CAT_SAFE,CAT_DANGER};
 
 	/**
 	*Holds The two categories of the data being classified, and number of times a given String appears
