@@ -4,8 +4,8 @@ import java.io.*;
 
 /**
 *@author Ethan Eldridge <ejayeldridge @ gmail.com>
-*@version 0.2
-*@since 2012-10-28
+*@version 0.3
+*@since 2012-11-28
 *
 * Naive Bayes classifier to classify a tweet as a danger or not. 
 */

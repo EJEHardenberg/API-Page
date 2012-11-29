@@ -8,8 +8,8 @@ import java.util.Iterator;
 
 /**
 *@author Ethan Eldridge <ejayeldridge @ gmail.com>
-*@version 0.0
-*@since 2012-10-22
+*@version 0.1
+*@since 2012-11-28
 *
 * Class providing an interface to the SQL database for training purposes. 
 */
