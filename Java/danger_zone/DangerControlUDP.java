@@ -278,20 +278,21 @@ public class DangerControlUDP  extends DangerControl{
 	*/
 	public void dispatchResponse(Stack<DangerNode> neighbors,DatagramPacket request){
 		//Lets send the response as a json array of the nodes
-		JSONObject response = new JSONObject();
-		System.out.println(neighbors);
-		response.put("neighbors", neighbors);
+		String responseString = "{@}";
+		responseString = responseString.replace("@",neighbors.toString());
+		responseString = responseString.replace("[","");
+		responseString = responseString.replace("]","");
 		// Send reply.
 	    InetAddress clientHost = request.getAddress();
 	    int clientPort = request.getPort();
 	    try{
-	    	byte[] buf = (neighbors.toString()).getBytes("utf-8");
+	    	byte[] buf = (responseString.toString()).getBytes("utf-8");
 		
 	    DatagramPacket reply = new DatagramPacket(buf, buf.length, clientHost, clientPort);
 	    try{ 
 	 	   clientListener.send(reply);
 	 	   System.out.println("Sending Neighbors Back");
-	 	   System.out.println(response.toString());
+	 	   System.out.println(responseString.toString());
 		}catch (Exception e) {
 			System.out.println("could not send response to client");
 			System.out.println("Exception: " + e.getMessage());
