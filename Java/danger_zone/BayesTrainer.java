@@ -50,7 +50,7 @@ public class BayesTrainer{
 		}
 		try{
 			//Open the specific the database
-			boolean initialized = specificData.initialize(password);
+			boolean initialized = specificData.initializeSpecific(password);
 			if(!initialized){
 				return false;
 			}
