@@ -95,7 +95,7 @@ public class BayesTrainer{
 		return specific.classify(tweet);
 	}
 
-	public String [] arr(){
+	public int [] arr(){
 		return specific.categories;
 	}
 
