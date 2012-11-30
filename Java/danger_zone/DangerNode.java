@@ -600,6 +600,76 @@ public class DangerNode{
 
 	}
 
+	public ArrayList<DangerNode> boundedSearch(float lat, float lon, double radius){
+		//Create a node to contain the search criteria:
+		DangerNode toFind = new DangerNode(lon,lat,-1);
+		//Create the region to search in:
+		double theta = lat;
+		double phi = lon;
+		double left = theta - (radius/Region.EARTH_RADIUS)*(180/Region.PI);
+		double right = theta + (radius/Region.EARTH_RADIUS)*(180/Region.PI);
+		double top = phi + (radius/(Region.EARTH_RADIUS*Math.cos(theta)))*(180/Region.PI);
+		double bottom = phi - (radius/(Region.EARTH_RADIUS*Math.cos(theta)))*(180/Region.PI);
+		Region searchRegion = new Region(left,right,top,bottom);
+
+		return innerBoundedSearch(toFind,searchRegion,new ArrayList<DangerNode>(),0,new Region());
+	}
+
+	public ArrayList<DangerNode> innerBoundedSearch(DangerNode sNode, Region sRegion,ArrayList<DangerNode> results,int depth,Region bRegion){
+		int axis = depth % coordinates.length;
+		if(this.isLeaf()){
+			if(sRegion.fullyContains(this)){
+				results.add(this);
+			}
+		}else{
+			//Subtree we need to redefine our bounding region bRegion
+			if(axis == 0){
+				//We are splitting on the x axis
+				if(sRegion.fullyContains(bRegion)){
+					//We are in the region so we report ourselves
+					results.add(this);
+				}
+				if(sRegion.intersects(bRegion)){
+					if(this.left != null){
+						//Search down the left with our splitting line as a bound on the right
+						return this.left.innerBoundedSearch(sNode,sRegion,results,depth,bRegion.setRight(this.getCoordinate(axis)));
+					}else{
+						//Null link return results
+						return results;
+					}
+				}
+				if(sRegion.intersects(bRegion)){
+					if(this.right != null){
+						//Search down the left with a splitting line as a bound on the left
+						return this.right.innerBoundedSearch(sNode,sRegion,results,depth,bRegion.setLeft(this.getCoordinate(axis)));
+					}
+				}
+			}else{
+				//We are splitting on the y  axis
+				if(sRegion.fullyContains(bRegion)){
+					//We are in the region so we report ourselves
+					results.add(this);
+				}
+				if(sRegion.intersects(bRegion)){
+					if(this.left != null){
+						//Search down the left with our splitting line as a bound on the right
+						return this.left.innerBoundedSearch(sNode,sRegion,results,depth,bRegion.setTop(this.getCoordinate(axis)));
+					}else{
+						//Null link return results
+						return results;
+					}
+				}
+				if(sRegion.intersects(bRegion)){
+					if(this.right != null){
+						//Search down the left with a splitting line as a bound on the left
+						return this.right.innerBoundedSearch(sNode,sRegion,results,depth,bRegion.setBottom(this.getCoordinate(axis)));
+					}
+				}
+			}
+		}
+		return results;
+	}
+
 	//Test function
 	public static void main(String args[]) throws Exception
 	{

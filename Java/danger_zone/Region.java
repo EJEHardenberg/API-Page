@@ -9,15 +9,44 @@ import java.io.*;
 * A region in space defined by two points (x,y) and (w,z)
 */
 public class Region{
+	static double EARTH_RADIUS = 6371.0;
+	static double PI = 3.14159265359;
+
 	double xleft   =  -Float.MAX_VALUE;
 	double xright  =   Float.MAX_VALUE;
 	double ybottom =  -Float.MAX_VALUE;
 	double ytop    =   Float.MAX_VALUE;
 
+
 	/**
 	*Creates a region containing the entire coordinate plane
 	*/
 	public Region(){
+	}
+
+	/**
+	*Sets the left boundary of the region
+	*@param left The double to set the left boundary to
+	*@return returns this Region
+	*/
+	public Region setLeft(double left){
+		this.xleft = left;
+		return this;
+	}
+
+	public Region setRight(double right){
+		this.xright = right;
+		return this;
+	}
+
+	public Region setTop(double top){
+		this.ytop = top;
+		return this;
+	}
+
+	public Region setBottom(double bottom){
+		this.ybottom = bottom;
+		return this;
 	}
 
 	/**
@@ -50,6 +79,14 @@ public class Region{
 		float y =node.getLatitude();
 		float x = node.getLongitude();
 		return ybottom <= y && y <= ytop && xleft <= x && x <= xright;
+	}
+
+	public boolean fullyContains(Region r){
+		return xleft <= r.xleft && r.xright <= xright && r.ytop <= ytop && ybottom <= r.ybottom;
+	}
+
+	public boolean intersects(Region r){
+		return !(xright < r.xleft) && !(r.xright < xleft) && !(r.ytop < ybottom) &&	!(ytop < r.ybottom);
 	}
 
 	/**
