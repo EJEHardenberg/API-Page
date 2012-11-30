@@ -9,10 +9,10 @@ import java.io.*;
 * A region in space defined by two points (x,y) and (w,z)
 */
 public class Region{
-	float xleft   =  -Float.MAX_VALUE;
-	float xright  =   Float.MAX_VALUE;
-	float ybottom =  -Float.MAX_VALUE;
-	float ytop    =   Float.MAX_VALUE;
+	double xleft   =  -Float.MAX_VALUE;
+	double xright  =   Float.MAX_VALUE;
+	double ybottom =  -Float.MAX_VALUE;
+	double ytop    =   Float.MAX_VALUE;
 
 	/**
 	*Creates a region containing the entire coordinate plane
@@ -23,7 +23,7 @@ public class Region{
 	/**
 	*Creates a Region definied by the four locations of its sides
 	*/
-	public Region(float left, float right, float top, float bottom){
+	public Region(double left, double right, double top, double bottom){
 		//Assume stupidity of the users
 		if(left < right){
 			xleft = left;
@@ -88,6 +88,30 @@ public class Region{
 		return y >= ytop || y >= ybottom;
 	}
 
+	/**
+	*Unit Test of the Class Region
+	*@param args The command line arguments (none for this class) to the Unit Test
+	*/
+	public static void main(String[] args) {
+		//Entire coordinate space (all things should intersect and be contained in)
+		Region space = new Region(); 
+		//A sub space that will be to the left of our node and below
+		Region leftSpace = new Region(-1.0,0.0,0.0,-2.0);
+		//A sub space that will be to the right of the node and above
+		Region rightSpace = new Region(1.5,3.0,5.0,2.0);
 
+		DangerNode node = new DangerNode(1,1,-1);
+
+		System.out.println("Contained in space: " + space.fullyContains(node));
+		System.out.println("Not Contained in leftspace: " + !leftSpace.fullyContains(node));
+		System.out.println("Not Contained in rightspace: " + !rightSpace.fullyContains(node));
+		System.out.println("Left Space is to the left: " + leftSpace.toTheLeftOf(node));
+		System.out.println("Left Space is beneath: " + leftSpace.below(node));
+		System.out.println("RightSpace is to the right: " + rightSpace.toTheRightOf(node));
+		System.out.println("RightSpace is above: " + rightSpace.above(node));
+		System.out.println("Left Space is not above: " + !leftSpace.above(node));
+		System.out.println("Right Space is not below: " + !rightSpace.below(node));
+
+	}
 
 }
