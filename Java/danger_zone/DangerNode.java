@@ -600,22 +600,29 @@ public class DangerNode{
 
 	}
 
-	public ArrayList<DangerNode> boundedSearch(float lat, float lon, double radius){
-		//Create a node to contain the search criteria:
-		DangerNode toFind = new DangerNode(lon,lat,-1);
-		//Create the region to search in:
+	private Region convertGeoPoint(float lat, float lon, double radius){
 		double theta = lat;
 		double phi = lon;
 		double left = theta - (radius/Region.EARTH_RADIUS)*(180/Region.PI);
 		double right = theta + (radius/Region.EARTH_RADIUS)*(180/Region.PI);
 		double top = phi + (radius/(Region.EARTH_RADIUS*Math.cos(theta)))*(180/Region.PI);
 		double bottom = phi - (radius/(Region.EARTH_RADIUS*Math.cos(theta)))*(180/Region.PI);
-		Region searchRegion = new Region(left,right,top,bottom);
-
-		return innerBoundedSearch(toFind,searchRegion,new ArrayList<DangerNode>(),0,new Region());
+		return new Region(left,right,top,bottom);
 	}
 
-	private ArrayList<DangerNode> innerBoundedSearch(DangerNode sNode, Region sRegion,ArrayList<DangerNode> results,int depth,Region bRegion){
+	private Region getRegionFor(float x, float y, double radius){
+		return new Region(x-radius,x+radius,y+radius,y-radius);
+	}
+
+	public ArrayList<DangerNode> boundedSearch(float lat, float lon, double radius){
+		//Create the region to search in:
+		
+		Region searchRegion = getRegionFor(lat,lon,radius);//convertGeoPoint(lat,lon,radius);
+
+		return innerBoundedSearch(searchRegion,new ArrayList<DangerNode>(),0,new Region());
+	}
+
+	private ArrayList<DangerNode> innerBoundedSearch(Region sRegion,ArrayList<DangerNode> results,int depth,Region bRegion){
 		int axis = depth % coordinates.length;
 		if(this.isLeaf()){
 			if(sRegion.fullyContains(this)){
@@ -636,7 +643,7 @@ public class DangerNode{
 				if(sRegion.intersects(bRegion)){
 					if(this.left != null){
 						//Search down the left with our splitting line as a bound on the right
-						return this.left.innerBoundedSearch(sNode,sRegion,results,depth+1,bRegion.setRight(this.getCoordinate(axis)));
+						return this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setRight(this.getCoordinate(axis)));
 					}else{
 						//Null link return results
 						return results;
@@ -645,7 +652,7 @@ public class DangerNode{
 				if(sRegion.intersects(bRegion)){
 					if(this.right != null){
 						//Search down the left with a splitting line as a bound on the left
-						return this.right.innerBoundedSearch(sNode,sRegion,results,depth+1,bRegion.setLeft(this.getCoordinate(axis)));
+						return this.right.innerBoundedSearch(sRegion,results,depth+1,bRegion.setLeft(this.getCoordinate(axis)));
 					}
 				}
 			}else{
@@ -661,7 +668,7 @@ public class DangerNode{
 				if(sRegion.intersects(bRegion)){
 					if(this.left != null){
 						//Search down the left with our splitting line as a bound on the right
-						return this.left.innerBoundedSearch(sNode,sRegion,results,depth+1,bRegion.setTop(this.getCoordinate(axis)));
+						return this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setTop(this.getCoordinate(axis)));
 					}else{
 						//Null link return results
 						return results;
@@ -670,13 +677,43 @@ public class DangerNode{
 				if(sRegion.intersects(bRegion)){
 					if(this.right != null){
 						//Search down the left with a splitting line as a bound on the left
-						return this.right.innerBoundedSearch(sNode,sRegion,results,depth+1,bRegion.setBottom(this.getCoordinate(axis)));
+						return this.right.innerBoundedSearch(sRegion,results,depth+1,bRegion.setBottom(this.getCoordinate(axis)));
 					}
 				}
 			}
 		}
 		return results;
 	}
+
+	/**
+	*
+	*/
+	private static ArrayList<DangerNode> flatten(ArrayList<DangerNode> nodes){
+		//Flatten each nodes subtree out.
+		ArrayList<DangerNode> temp = new ArrayList<DangerNode>();
+		for(DangerNode node : nodes){
+			temp = node.collectTree(temp);
+		}
+		return temp;
+	}
+
+	public ArrayList<DangerNode> collectTree(){
+		return collectTree(new ArrayList<DangerNode>());
+	}
+
+	public  ArrayList<DangerNode> collectTree(ArrayList<DangerNode> results){
+		//Traverse the tree and put all children in there
+		if(this.left!= null){
+			results = this.left.collectTree(results);
+		}
+		if(this.right!=null){
+			results = this.right.collectTree(results);
+		}
+		if(!results.contains(this)){
+			results.add(this);
+		}
+		return results;
+	}	
 
 	//Test function
 	public static void main(String args[]) throws Exception
@@ -709,28 +746,44 @@ public class DangerNode{
 		d.printTree();
 
 
+		
+	
+		System.out.println("Creating Tree");
+		DangerNode p = new DangerNode(9,6,2);
+		//(2,3), (5,4), (9,6), (4,7), (8,1), (7,2).
+		p.addNode(new DangerNode(7,2,1));
+		p.addNode(new DangerNode(2,3,3));
+		p.addNode(new DangerNode(5,4,2));
+		p.addNode(new DangerNode(8,1,3));
+		p.addNode(new DangerNode(4,7,3));
+		p.printTree();
+		System.out.println("Re-Balancing Tree");
+		p= DangerNode.reBalanceTree(p);
+		p.printTree();
+		
+		float [] s = new float[2];
+		System.out.println("Nearest Neighbor Search on 13,9");
+		s[0] = 13;
+		s[1] = 9;
+		Stack<DangerNode> bests = p.nearestNeighbor(s,2);
+		while(!bests.empty()){
+			System.out.println("Bests: "+ bests.pop());
+		}
+		
 
-	/*
-	// 	System.out.println("Creating Tree");
-	// 	DangerNode p = new DangerNode(9,9,1);
-	// 	//(2,3), (5,4), (9,6), (4,7), (8,1), (7,2).
-	// 	p.addNode(new DangerNode(7,2,4));
-	// 	p.addNode(new DangerNode(12,12,5));
-	// 	p.addNode(new DangerNode(15,13,6));
-	// 	p.printTree();
-	// 	System.out.println("Re-Balancing Tree");
-	// 	p= DangerNode.reBalanceTree(p);
-	// 	p.printTree();
-	// 	float [] s = new float[2];
-	// 	System.out.println("Nearest Neighbor Search on 13,9");
-	// 	s[0] = 13;
-	// 	s[1] = 9;
-	// 	Stack<DangerNode> bests = p.nearestNeighbor(s,2);
-	// 	System.out.println("Bests: \n"+ bests.pop() +"\n" + bests.pop());
-	// 	p.printTree();
-	// 	bests = p.nearestNeighbor(s,3,11);
-	// 	System.out.println("Bests: \n"+ bests.pop() +"\n" + bests.pop());
-	*/
+		System.out.println("Testing Bounded Tree Search Algorithm");
+		ArrayList<DangerNode> results =  p.boundedSearch(1,1,4);
+		for(DangerNode result : DangerNode.flatten(results)){
+			System.out.println("Result: " + result.getLongitude() + "," + result.getLatitude());
+		}
+
+		System.out.println("Testing collect tree");
+		results = p.collectTree();
+		for(DangerNode result : results){
+			System.out.println("Result: " + result.getLongitude() + "," + result.getLatitude());
+		}
+
+
 
 	}// end main	
 
