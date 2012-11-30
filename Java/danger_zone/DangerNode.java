@@ -151,17 +151,14 @@ public class DangerNode{
 			}
 		}
 		return null;
-	
+	}
+
 	/**
 	*Returns if this node is a leaf or not.
 	*@return True if this node is a leaf and False if not.
 	*/
 	public boolean isLeaf(){	
 		return this.right == null && this.left == null;
-	}
-
-	public ArrayList<DangerNode> radiiSearch(DangerNode v, Region R){
-		
 	}
 
 	/**
