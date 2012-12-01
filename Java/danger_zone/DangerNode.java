@@ -783,7 +783,7 @@ public class DangerNode{
 			System.out.println("Result: " + result.getLongitude() + "," + result.getLatitude());
 		}
 
-
+//
 
 	}// end main	
 
