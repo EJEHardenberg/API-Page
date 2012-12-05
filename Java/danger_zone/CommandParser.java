@@ -10,10 +10,12 @@ import java.util.HashMap;
 * The CommandParser is a static class that contains the constants CMD_LON and CMD_LAT which correspond to the
 *format of the geo command to be interpreted. 
 *GEO FORMAT: LON XXX.XXXXXX LAT XXX.XXXXXXX where X's are numeric and to any precision.
-*GEO FORMAT: LON XXX.XXXXXX LAT XXX.XXXXXXX NUM XXX where NUM specifies up to how many nodes you would like returned.
+*GEO FORMAT: LON XXX.XXXXXX LAT XXX.XXXXXXX RAD XXX where RAD specifies the radius of the region you'd like
+*NEIGHBOR FORMAT: NEIGHBORS LON XXX.XXXXX LAT.XXXXXXX NUM X where X's are numeric and to any precison and NUM is the number of nodes you'd like back at most
 *KILL CODE: KILLSERVER0x0000
 *CLASSIFY TEXT   Classifier will classify the text and return which category it is in, D or S for danger or safe.
 *TRAIN [D|S] TEXT classify given text as dangerous or safe, D will specify the text as Dangerouns and S as Safe.
+*
 *ADD DANGERZONE 
 */
 public class CommandParser{
@@ -58,9 +60,9 @@ public class CommandParser{
 	*/
 	static final String CMD_NEIGHBOR = "NEIGHBORS";
 	/**
-	*
+	*Constant for determining how manay nodes at most you would like back from the neighbors command
 	*/
-	static final String CMD_COUNT = "NUM";
+	static final String CMD_NUM = "NUM";
 
 
 
@@ -113,6 +115,47 @@ public class CommandParser{
 		lonlatTuple[1] = cmds.get(CMD_LAT);
 		lonlatTuple[2] = cmds.get(CMD_RAD);
 		
+		return lonlatTuple;
+	}
+
+	/**
+	**If the command string is of the form NEIGHBORS LON XXX.XXXX LAT XXX.XXXX then this function will remove the longitude and latitude from the string and return them in a float array. The returning array will have longitude first in the array, and latitude second. 
+	*@param command The String command to be parsed for neighbor commands
+	*@return A float array of size 3 with longitude and latitude index stored in 0 and 1 indices, and Number requested in 2.
+	*/
+	public static float[] parseNeighborCommand(String command){
+		//split the command
+		String [] parts;
+		parts = command.split(" ");
+
+		HashMap<String,Float> cmds = new HashMap<String,Float>(parts.length);
+		for(int i=0; i < parts.length; i++){
+			if(parts[i].equals(CMD_LON)){
+				//Bounds check on i+1 is not done because this function expects a well formed Geo Command
+				cmds.put(CMD_LON,Float.parseFloat(parts[i+1]));
+				continue;
+			}else if(parts[i].equals(CMD_LAT)){
+				//No bounds check because we should be sure of a well formed Geo Command here
+				cmds.put(CMD_LAT,Float.parseFloat(parts[i+1]));
+				continue;
+			}else if(parts[i].equals(CMD_NUM)){
+				cmds.put(CMD_NUM,Float.parseFloat(parts[i+1]));
+				continue;
+			}
+		}
+		//Now we 'hopefully' have what we'd like, in which case we should return it
+		float [] lonlatTuple = new float[3];
+
+		//Check for nulls
+		if(!cmds.containsKey(CMD_LON) || !cmds.containsKey(CMD_LAT)){
+			return null;
+		}
+
+		//cmds.get will return null if key does not exist
+		lonlatTuple[0] = cmds.get(CMD_LON);
+		lonlatTuple[1] = cmds.get(CMD_LAT);
+		lonlatTuple[2] = cmds.get(CMD_NUM);
+
 		return lonlatTuple;
 	}
 

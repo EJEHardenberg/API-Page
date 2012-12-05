@@ -177,7 +177,18 @@ public class DangerControlUDP  extends DangerControl{
 	public void handleLine(String line,DatagramPacket request){
 			System.out.println(this.dangerZones);
 			//We should use some type of switch or something to figure out what function to call from the command parser
-			if(line.indexOf(CommandParser.CMD_LON) != -1 && line.indexOf(CommandParser.CMD_LAT) != -1){
+			if(line.indexOf(CommandParser.CMD_NEIGHBOR)!=-1){
+				try{ 
+					Stack<DangerNode> temp = this.handleNeighborCommand(line.trim());
+					this.dispatchNeighborResponse(temp,request);
+				}catch(Exception e){
+					System.out.println("Error handling Geo Command: '"  + line + "' is not properly formed");
+					System.out.println("Exception: " + e.getMessage());
+					for(StackTraceElement element : e.getStackTrace()){
+						System.out.println("Trace: " + element.toString());
+					}
+				}
+			}else if(line.indexOf(CommandParser.CMD_LON) != -1 && line.indexOf(CommandParser.CMD_LAT) != -1){
 				//Handle the command and respond to it
 				try{ 
 					ArrayList<DangerNode> temp = this.handleGeoCommand(line.trim());
@@ -226,8 +237,6 @@ public class DangerControlUDP  extends DangerControl{
 					System.out.println("Unknown category");
 				}
 				this.dispatchTrainResponse(commited, request);;
-			}else if(line.indexOf(CommandParser.CMD_NEIGHBOR)!=-1){
-
 			}
 			//We can extend right here to implement more commands
 	}
@@ -294,6 +303,36 @@ public class DangerControlUDP  extends DangerControl{
 	    DatagramPacket reply = new DatagramPacket(buf, buf.length, clientHost, clientPort);
 	    try{ 
 	 	   clientListener.send(reply);
+	 	   System.out.println("Sending Bounded Results Back");
+	 	   System.out.println(responseString.toString());
+		}catch (Exception e) {
+			System.out.println("could not send response to client");
+			System.out.println("Exception: " + e.getMessage());
+		}
+	}catch(Exception e){
+		System.out.println("Exception in encoding");
+	}
+	}
+
+	/**
+	*Dispatches a response back to the client of the nearest neighbors to the point they asked for.
+	*@param neighbors The nearest zones returned by the search for the tree
+	*/
+	public void dispatchNeighborResponse(Stack<DangerNode> neighbors,DatagramPacket request){
+		//Lets send the response as a json array of the nodes
+		String responseString = "{@}";
+		responseString = responseString.replace("@",neighbors.toString());
+		responseString = responseString.replace("[","");
+		responseString = responseString.replace("]","");
+		// Send reply.
+	    InetAddress clientHost = request.getAddress();
+	    int clientPort = request.getPort();
+	    try{
+	    	byte[] buf = (responseString.toString()).getBytes("utf-8");
+		
+	    DatagramPacket reply = new DatagramPacket(buf, buf.length, clientHost, clientPort);
+	    try{ 
+	 	   clientListener.send(reply);
 	 	   System.out.println("Sending Neighbors Back");
 	 	   System.out.println(responseString.toString());
 		}catch (Exception e) {
@@ -327,7 +366,31 @@ public class DangerControlUDP  extends DangerControl{
 
 		}
 		return null;
-}
+	}
+
+	/**
+	*Parses a command in the NEIGHBOR GEO COMMAND format, will return the results of searching the tree for the specified coordinate and number of near zones
+	*@param geoCommand String command in the NEIGHBOR GEO COMMAND format;
+	*@return returns the results of searching the tree for the coordinate.
+	*/
+	public Stack<DangerNode> handleNeighborCommand(String geoCommand){
+		float[] geoCmd = null;
+		//Parse information from the message:
+		geoCmd = CommandParser.parseNeighborCommand(geoCommand);
+		if(geoCmd != null){
+			//We have recieved the Coordinates and should play with the tree
+			//System.out.println("Searching tree for " + geoCmd[0] + " " + geoCmd[1]);
+			if(dangerZones == null){
+				System.out.println("Error: No Tree Initailized");
+				return null;
+			}
+			return dangerZones.nearestNeighbor(new float[]{geoCmd[0],geoCmd[1]},(int)geoCmd[2]);
+
+		}
+		return null;
+	}
+
+
 
 	public static void main(String argv[]) throws Exception
 	{
