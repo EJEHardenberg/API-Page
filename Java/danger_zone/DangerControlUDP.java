@@ -320,7 +320,7 @@ public class DangerControlUDP  extends DangerControl{
 				System.out.println("Error: No Tree Initailized");
 				return null;
 			}
-			return dangerZones.nearestNeighbor(new float[]{geoCmd[0],geoCmd[1]},(int)geoCmd[2]);
+			return dangerZones.boundedSearch(geoCmd[0],geoCmd[1],(double)geoCmd[2]);
 
 		}
 		return null;

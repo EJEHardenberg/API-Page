@@ -28,7 +28,7 @@ public class CommandParser{
 	/**
 	*Constant for the number of nodes a query would like returned
 	*/
-	static final String CMD_COUNT = "RAD";
+	static final String CMD_RAD = "RAD";
 	/**
 	*Constant for the kill code to the server if the server is running in continous mode. This does not kill the server if the server is running on a time out.
 	*/
@@ -56,6 +56,11 @@ public class CommandParser{
 	/**
 	*Constant for the determine class of text option in the CLASSIFY command.
 	*/
+	static final String CMD_NEIGHBOR = "NEIGHBORS";
+	/**
+	*
+	*/
+	static final String CMD_COUNT = "NUM;"
 
 
 
@@ -90,8 +95,8 @@ public class CommandParser{
 				//No bounds check because we should be sure of a well formed Geo Command here
 				cmds.put(CMD_LAT,Float.parseFloat(parts[i+1]));
 				continue;
-			}else if(parts[i].equals(CMD_COUNT)){
-				cmds.put(CMD_COUNT,Float.parseFloat(parts[i+1]));
+			}else if(parts[i].equals(CMD_RAD)){
+				cmds.put(CMD_RAD,Float.parseFloat(parts[i+1]));
 				continue;
 			}
 		}
@@ -106,7 +111,7 @@ public class CommandParser{
 		//cmds.get will return null if key does not exist
 		lonlatTuple[0] = cmds.get(CMD_LON);
 		lonlatTuple[1] = cmds.get(CMD_LAT);
-		lonlatTuple[2] = cmds.get(CMD_COUNT);
+		lonlatTuple[2] = cmds.get(CMD_RAD);
 		
 		return lonlatTuple;
 	}
