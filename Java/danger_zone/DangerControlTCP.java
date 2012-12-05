@@ -4,6 +4,7 @@ import java.net.*;
 import java.util.Timer;
 import java.util.Stack;
 import java.util.Map;
+import java.util.ArrayList;
 //http://code.google.com/p/json-simple/
 import org.json.simple.JSONObject;
 
@@ -257,7 +258,7 @@ public class DangerControlTCP extends DangerControl{
 	*Dispatches a response back to the client of the nearest neighbors to the point they asked for.
 	*@param neighbors The nearest zones returned by the search for the tree
 	*/
-	public void dispatchResponse(Stack<DangerNode> neighbors,DataOutputStream responseStream){
+	public void dispatchResponse(ArrayList<DangerNode> neighbors,DataOutputStream responseStream){
 		//Lets send the response as a json array of the nodes
 		JSONObject response = new JSONObject();
 		response.put("neighbors", neighbors);
@@ -276,7 +277,7 @@ public class DangerControlTCP extends DangerControl{
 	*@param geoCommand String command in the GEO COMMAND format;
 	*@return returns the results of searching the tree for the coordinate.
 	*/
-	public Stack<DangerNode> handleGeoCommand(String geoCommand){
+	public ArrayList<DangerNode> handleGeoCommand(String geoCommand){
 		float[] geoCmd = null;
 		//Parse information from the message:
 		geoCmd = CommandParser.parseGeoCommand(geoCommand);
@@ -287,7 +288,7 @@ public class DangerControlTCP extends DangerControl{
 				System.out.println("No Tree Initailized");
 				return null;
 			}
-			return dangerZones.nearestNeighbor(new float[]{geoCmd[0],geoCmd[1]},(int)geoCmd[2]);
+			return dangerZones.boundedSearch(geoCmd[0],geoCmd[1],(double)geoCmd[2]);
 
 		}
 		return null;

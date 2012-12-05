@@ -4,6 +4,7 @@ import java.net.*;
 import java.util.Timer;
 import java.util.Stack;
 import java.util.Map;
+import java.util.ArrayList;
 //http://code.google.com/p/json-simple/
 import org.json.simple.JSONObject;
 
@@ -59,7 +60,7 @@ public abstract class DangerControl{
 	public abstract void trainBayes(String password,boolean debugOn);
 	public abstract void run() throws Exception;
 	public abstract void run(boolean continous) throws Exception;
-	public abstract Stack<DangerNode> handleGeoCommand(String geoCommand);
+	public abstract ArrayList<DangerNode> handleGeoCommand(String geoCommand);
 	public abstract DangerNode setRootNode(DangerNode dn);
 	
 

@@ -3,6 +3,7 @@ import java.io.*;
 import java.net.*;
 import java.util.Timer;
 import java.util.Stack;
+import java.util.ArrayList;
 import java.util.Map;
 //http://code.google.com/p/json-simple/
 import org.json.simple.JSONObject;
@@ -179,7 +180,7 @@ public class DangerControlUDP  extends DangerControl{
 			if(line.indexOf(CommandParser.CMD_LON) != -1 && line.indexOf(CommandParser.CMD_LAT) != -1){
 				//Handle the command and respond to it
 				try{ 
-					Stack<DangerNode> temp = this.handleGeoCommand(line.trim());
+					ArrayList<DangerNode> temp = this.handleGeoCommand(line.trim());
 					this.dispatchResponse(temp,request);
 				}catch(Exception e){
 					System.out.println("Error handling Geo Command: '"  + line + "' is not properly formed");
@@ -225,6 +226,8 @@ public class DangerControlUDP  extends DangerControl{
 					System.out.println("Unknown category");
 				}
 				this.dispatchTrainResponse(commited, request);;
+			}else if(line.indexOf(CommandParser.CMD_NEIGHBOR)!=-1){
+
 			}
 			//We can extend right here to implement more commands
 	}
@@ -276,7 +279,7 @@ public class DangerControlUDP  extends DangerControl{
 	*Dispatches a response back to the client of the nearest neighbors to the point they asked for.
 	*@param neighbors The nearest zones returned by the search for the tree
 	*/
-	public void dispatchResponse(Stack<DangerNode> neighbors,DatagramPacket request){
+	public void dispatchResponse(ArrayList<DangerNode> neighbors,DatagramPacket request){
 		//Lets send the response as a json array of the nodes
 		String responseString = "{@}";
 		responseString = responseString.replace("@",neighbors.toString());
@@ -309,7 +312,7 @@ public class DangerControlUDP  extends DangerControl{
 	*@param geoCommand String command in the GEO COMMAND format;
 	*@return returns the results of searching the tree for the coordinate.
 	*/
-	public Stack<DangerNode> handleGeoCommand(String geoCommand){
+	public ArrayList<DangerNode> handleGeoCommand(String geoCommand){
 		float[] geoCmd = null;
 		//Parse information from the message:
 		geoCmd = CommandParser.parseGeoCommand(geoCommand);

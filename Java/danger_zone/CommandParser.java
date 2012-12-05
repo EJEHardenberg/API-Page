@@ -60,7 +60,7 @@ public class CommandParser{
 	/**
 	*
 	*/
-	static final String CMD_COUNT = "NUM;"
+	static final String CMD_COUNT = "NUM";
 
 
 
