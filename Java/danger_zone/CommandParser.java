@@ -28,7 +28,7 @@ public class CommandParser{
 	/**
 	*Constant for the number of nodes a query would like returned
 	*/
-	static final String CMD_COUNT = "NUM";
+	static final String CMD_COUNT = "RAD";
 	/**
 	*Constant for the kill code to the server if the server is running in continous mode. This does not kill the server if the server is running on a time out.
 	*/

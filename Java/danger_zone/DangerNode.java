@@ -617,7 +617,7 @@ public class DangerNode{
 	public ArrayList<DangerNode> boundedSearch(float lat, float lon, double radius){
 		//Create the region to search in:
 		
-		Region searchRegion = getRegionFor(lat,lon,radius);//convertGeoPoint(lat,lon,radius);
+		Region searchRegion = convertGeoPoint(lat,lon,radius);//convertGeoPoint(lat,lon,radius);
 
 		return innerBoundedSearch(searchRegion,new ArrayList<DangerNode>(),0,new Region());
 	}
