@@ -283,6 +283,7 @@ public class DangerControlUDP  extends DangerControl{
 		//Lets send the response as a json array of the nodes
 		String responseString = "{@}";
 		responseString = responseString.replace("@",neighbors.toString());
+		System.out.println(neighbors.toString() + neighbors.size()) ;
 		responseString = responseString.replace("[","");
 		responseString = responseString.replace("]","");
 		// Send reply.
