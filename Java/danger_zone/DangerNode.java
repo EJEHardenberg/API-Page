@@ -614,11 +614,15 @@ public class DangerNode{
 	private Region convertGeoPoint(float lat, float lon, double radius){
 		double theta = lat;
 		double phi = lon;
-		double deltaTheta = (radius/Region.EARTH_RADIUS)*(180/Region.PI);
+		
+		double deltaTheta = (radius/Region.EARTH_RADIUS_KM)*(180/Region.PI);
 		double left = theta - deltaTheta;
 		double right = theta + deltaTheta;
-		double top = phi + (radius/(Region.EARTH_RADIUS*Math.cos(theta*(Region.PI/180))))*(180/Region.PI);
-		double bottom = phi - (radius/(Region.EARTH_RADIUS*Math.cos(theta*(Region.PI/180))))*(180/Region.PI);
+
+		double deltaPhi = (radius/(Region.EARTH_RADIUS_KM*Math.cos(theta*(Region.PI/180))))*(180/Region.PI);
+		double top = phi + deltaPhi;
+		double bottom = phi - deltaPhi;
+		System.out.println("LEFT: " + left  + "RIGHT: " + right + "TOP: " + top + "BOTTOM: " + bottom);
 		return new Region(left,right,top,bottom);
 	}
 

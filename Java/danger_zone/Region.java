@@ -9,7 +9,7 @@ import java.io.*;
 * A region in space defined by two points (x,y) and (w,z)
 */
 public class Region{
-	static double EARTH_RADIUS = 6371.0;
+	static double EARTH_RADIUS_KM = 6371.0;
 	static double PI = 3.14159265359;
 
 	public double xleft   =  -Float.MAX_VALUE;
