@@ -707,7 +707,7 @@ public class DangerNode{
 				if(sRegion.intersects(bRegion)){
 					if(this.left != null){
 						//Search down the left with our splitting line as a bound on the right
-						results = this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setRight(this.getCoordinate(axis)));
+						results = this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setRight(this.getLongitude()));
 					}
 				}
 				bRegion = hack;
@@ -716,7 +716,7 @@ public class DangerNode{
 					if(this.right != null){
 						
 						//Search down the left with a splitting line as a bound on the left
-						results = this.right.innerBoundedSearch(sRegion,results,depth+1,bRegion.setLeft(this.getCoordinate(axis)));
+						results = this.right.innerBoundedSearch(sRegion,results,depth+1,bRegion.setLeft(this.getLongitude()));
 					}
 				}
 			}else{
@@ -733,7 +733,7 @@ public class DangerNode{
 					if(this.left != null){
 						
 						//Search down the left with our splitting line as a bound on the right
-						results = this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setTop(this.getCoordinate(axis)));
+						results = this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setTop(this.getLatitude()));
 					}
 				}
 				bRegion = hack;
@@ -741,7 +741,7 @@ public class DangerNode{
 					if(this.right != null){
 						
 						//Search down the left with a splitting line as a bound on the left
-						results = this.right.innerBoundedSearch(sRegion,results,depth+1,bRegion.setBottom(this.getCoordinate(axis)));
+						results = this.right.innerBoundedSearch(sRegion,results,depth+1,bRegion.setBottom(this.getLatitude()));
 					}
 				}
 			}
