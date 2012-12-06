@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 /**
 *@author Ethan Eldridge <ejayeldridge @ gmail.com>
-*@version 0.0
-*@since 2012-10-7
+*@version 0.2
+*@since 2012-12-5
 *
 * The CommandParser is a static class that contains the constants CMD_LON and CMD_LAT which correspond to the
 *format of the geo command to be interpreted. 
@@ -80,7 +80,7 @@ public class CommandParser{
 	/**
 	*If the command string is of the form LON XXX.XXXX LAT XXX.XXXX then this function will remove the longitude and latitude from the string and return them in a float array. The returning array will have longitude first in the array, and latitude second. 
 	*@param command The String command to be parsed for geo commands
-	*@return A float array of size 2 with longitude and latitude stored in 0 and 1 indices. Note that if the command being parsed is not in the Geo command format then one or more of the resulting elements will be null. This should be checked by the calling program.
+	*@return A float array of size 3 with longitude and latitude stored in 0 and 1 indices. And Radius stored in 3 Note that if the command being parsed is not in the Geo command format then one or more of the resulting elements will be null. This should be checked by the calling program.
 	*/
 	public static float[] parseGeoCommand(String command){
 		//split the command by its spaces and look at the parts to find longitude and latitude

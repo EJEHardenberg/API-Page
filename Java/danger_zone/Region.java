@@ -12,10 +12,10 @@ public class Region{
 	static double EARTH_RADIUS = 6371.0;
 	static double PI = 3.14159265359;
 
-	double xleft   =  -Float.MAX_VALUE;
-	double xright  =   Float.MAX_VALUE;
-	double ybottom =  -Float.MAX_VALUE;
-	double ytop    =   Float.MAX_VALUE;
+	public double xleft   =  -Float.MAX_VALUE;
+	public double xright  =   Float.MAX_VALUE;
+	public double ybottom =  -Float.MAX_VALUE;
+	public double ytop    =   Float.MAX_VALUE;
 
 
 	/**

@@ -11,8 +11,8 @@ import java.lang.Math;
 /**
 *@author Ethan Eldridge <ejayeldridge @ gmail.com>
 *@author Garth Fritz <gfritz @ uvm.edu>
-*@version 0.1
-*@since 2012-10-2
+*@version 0.2
+*@since 2012-11-5
 *
 * The DangerNode class is a node of a K-d Tree of dimensionality 2. It contains an id for reference to an outside database as well as
 * a timestamp identified with the time the Danger Zone took place or was entered into the database. The Node is sorted by longitude and
@@ -21,10 +21,14 @@ import java.lang.Math;
 * 
 */
 public class DangerNode{
-	private final float LAT_DUMMY = 100.0f;
-	private final float LONG_DUMMY = 200.0f;
 
+	/**
+	*For all instances a unique number for the nodes to be reference by
+	*/
 	private static int numNodes = 0;
+	/**
+	*This node's number assigned to it from numNodes.
+	*/
 	private int nodeNumber = -1;
 	/**
 	*Identifier corresponding to an integer database key.
@@ -600,6 +604,13 @@ public class DangerNode{
 
 	}
 
+	/**
+	*Uses Professor Snapps math to convert a coordinate to something we can work on
+	*@param lat The latitude to convert
+	*@param lon The longitude to convert
+	*@param radius The radius you would like your region to be from the center point of (lat,lon)
+	*@return Returns a Region defined by the radius with the cetner point of (lat,lon)
+	*/
 	private Region convertGeoPoint(float lat, float lon, double radius){
 		double theta = lat;
 		double phi = lon;
@@ -610,18 +621,57 @@ public class DangerNode{
 		return new Region(left,right,top,bottom);
 	}
 
+	/**
+	*A function that just creates a regular old box from a center point with sides of 2*radius
+	*@param x The center x coordinate
+	*@param y The center y coordinate
+	*@param radius The radius to use to create the region from the center point
+	*@return The rectangular region defined by the center point (x,y) with sides of 2*radius    
+	*/
 	private Region getRegionFor(float x, float y, double radius){
 		return new Region(x-radius,x+radius,y+radius,y-radius);
 	}
 
+	/**
+	*Does a bounded range search with the region defined by the center point (lat,lon) with radius of radius.
+	*@param lat The latitiude to use as a center point
+	*@param lon The longitude to use as a center point
+	*@param radius The radius to use as the radius in defining the region.
+	*@return A list of DangerNodes contained within the search region.
+	*/
 	public ArrayList<DangerNode> boundedSearch(float lat, float lon, double radius){
 		//Create the region to search in:
 		
 		Region searchRegion = convertGeoPoint(lat,lon,radius);//convertGeoPoint(lat,lon,radius);
+		ArrayList<DangerNode> results = new ArrayList<DangerNode>();
+		if(searchRegion.xright >= 180){
+			//We need to split the region
+			Region leftHalf = new Region(searchRegion.xleft, 180, searchRegion.ytop,searchRegion.ybottom);
+			results = innerBoundedSearch(leftHalf,results,0,new Region());
+			Region rightHalf = new Region(-180, searchRegion.xright - 360 , searchRegion.ytop,searchRegion.ybottom);
+			results = innerBoundedSearch(rightHalf,results,0,new Region());
+			return results;
 
-		return innerBoundedSearch(searchRegion,new ArrayList<DangerNode>(),0,new Region());
+		}else if(searchRegion.xleft <= -180){
+			//Need to split
+			Region leftHalf = new Region(-180,searchRegion.xright,searchRegion.ytop,searchRegion.ybottom);
+			results = innerBoundedSearch(leftHalf,results,0,new Region());
+			Region rightHalf = new Region(searchRegion.xleft + 360, 180,searchRegion.ytop,searchRegion.ybottom);
+			results = innerBoundedSearch(rightHalf,results,0,new Region());
+			return results;
+		}
+
+		return innerBoundedSearch(searchRegion,results,0,new Region());
 	}
 
+	/**
+	*The actual bounded range algorithm. 
+	*@param sRegion The search region to search in. 
+	*@param results The results of the search so far
+	*@param depth the current depth of the search
+	*@param bRegion the bounded region so far
+	*@return A list of DangerNodes contained within the search region
+	*/
 	private ArrayList<DangerNode> innerBoundedSearch(Region sRegion,ArrayList<DangerNode> results,int depth,Region bRegion){
 		int axis = depth % coordinates.length;
 		if(this.isLeaf()){
@@ -686,7 +736,9 @@ public class DangerNode{
 	}
 
 	/**
-	*
+	*Flattens multiple arraylists of dangernodes into a single list
+	*@param nodes The arraylist to flatten
+	*@return A flattened list 
 	*/
 	private static ArrayList<DangerNode> flatten(ArrayList<DangerNode> nodes){
 		//Flatten each nodes subtree out.
@@ -697,6 +749,9 @@ public class DangerNode{
 		return temp;
 	}
 
+	/**
+	*Returns all the children 
+	*/
 	public ArrayList<DangerNode> collectTree(){
 		return collectTree(new ArrayList<DangerNode>());
 	}
