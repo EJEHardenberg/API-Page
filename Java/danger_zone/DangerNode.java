@@ -701,6 +701,7 @@ public class DangerNode{
 						results.add(this);
 					}
 				}
+				System.out.println("BEFORE LEFT: " + bRegion);
 				if(sRegion.intersects(bRegion)){
 					if(this.left != null){
 						System.out.println("LEFT");
@@ -708,6 +709,7 @@ public class DangerNode{
 						results = this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setRight(this.getCoordinate(axis)));
 					}
 				}
+				System.out.println("AFTER LEFT: " + bRegion);
 				if(sRegion.intersects(bRegion)){
 					if(this.right != null){
 						System.out.println("RIGHT");
