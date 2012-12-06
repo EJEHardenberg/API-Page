@@ -685,6 +685,7 @@ public class DangerNode{
 	private ArrayList<DangerNode> innerBoundedSearch(Region sRegion,ArrayList<DangerNode> results,int depth,Region bRegion){
 		int axis = depth % coordinates.length;
 		System.out.println(this.getLongitude() + " "+ this.getLatitude());
+		Region hack = new Region(bRegion.xleft,bRegion.xright,bRegion.ytop,bRegion.ybottom);
 		if(this.isLeaf()){
 			if(sRegion.fullyContains(this)){
 				results.add(this);
@@ -709,6 +710,7 @@ public class DangerNode{
 						results = this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setRight(this.getCoordinate(axis)));
 					}
 				}
+				bRegion = hack;
 				System.out.println("AFTER LEFT: " + bRegion);
 				if(sRegion.intersects(bRegion)){
 					if(this.right != null){
@@ -734,6 +736,7 @@ public class DangerNode{
 						results = this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setTop(this.getCoordinate(axis)));
 					}
 				}
+				bRegion = hack;
 				if(sRegion.intersects(bRegion)){
 					if(this.right != null){
 						System.out.println("RIGHT");
