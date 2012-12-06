@@ -684,6 +684,7 @@ public class DangerNode{
 	*/
 	private ArrayList<DangerNode> innerBoundedSearch(Region sRegion,ArrayList<DangerNode> results,int depth,Region bRegion){
 		int axis = depth % coordinates.length;
+		System.out.println(depth);
 		if(this.isLeaf()){
 			if(sRegion.fullyContains(this)){
 				results.add(this);
