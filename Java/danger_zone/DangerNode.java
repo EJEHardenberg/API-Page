@@ -649,6 +649,7 @@ public class DangerNode{
 		
 		Region searchRegion = convertGeoPoint(lat,lon,radius);//convertGeoPoint(lat,lon,radius);
 		ArrayList<DangerNode> results = new ArrayList<DangerNode>();
+		System.out.println(searchRegion);
 		if(searchRegion.xright >= 180){
 			//We need to split the region
 			Region leftHalf = new Region(searchRegion.xleft, 180, searchRegion.ytop,searchRegion.ybottom);
