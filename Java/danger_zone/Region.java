@@ -24,6 +24,10 @@ public class Region{
 	public Region(){
 	}
 
+	public String toString(){
+		return " LEFT: " + xleft  + " RIGHT: " + xright + " TOP: " + ytop + " BOTTOM: " + ybottom;
+	}
+
 	/**
 	*Sets the left boundary of the region
 	*@param left The double to set the left boundary to

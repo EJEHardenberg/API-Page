@@ -622,7 +622,7 @@ public class DangerNode{
 		double deltaPhi = (radius/(Region.EARTH_RADIUS_KM*Math.cos(theta*(Region.PI/180))))*(180/Region.PI);
 		double top = phi + deltaPhi;
 		double bottom = phi - deltaPhi;
-		System.out.println("LEFT: " + left  + "RIGHT: " + right + "TOP: " + top + "BOTTOM: " + bottom);
+
 		return new Region(left,right,top,bottom);
 	}
 
@@ -652,8 +652,10 @@ public class DangerNode{
 		if(searchRegion.xright >= 180){
 			//We need to split the region
 			Region leftHalf = new Region(searchRegion.xleft, 180, searchRegion.ytop,searchRegion.ybottom);
+			System.out.println("LEFTHALF: " + leftHalf);
 			results = innerBoundedSearch(leftHalf,results,0,new Region());
 			Region rightHalf = new Region(-180, searchRegion.xright - 360 , searchRegion.ytop,searchRegion.ybottom);
+			System.out.println("RIGHTHALF: " + rightHalf);
 			results = innerBoundedSearch(rightHalf,results,0,new Region());
 			return results;
 
@@ -661,8 +663,10 @@ public class DangerNode{
 			//Need to split
 			Region leftHalf = new Region(-180,searchRegion.xright,searchRegion.ytop,searchRegion.ybottom);
 			results = innerBoundedSearch(leftHalf,results,0,new Region());
+			System.out.println("LEFTHALF: " + leftHalf);
 			Region rightHalf = new Region(searchRegion.xleft + 360, 180,searchRegion.ytop,searchRegion.ybottom);
 			results = innerBoundedSearch(rightHalf,results,0,new Region());
+			System.out.println("RIGHTHALF: " + rightHalf);
 			return results;
 		}
 
