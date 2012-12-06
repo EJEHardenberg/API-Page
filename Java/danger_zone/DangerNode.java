@@ -689,6 +689,7 @@ public class DangerNode{
 		if(this.isLeaf()){
 			if(sRegion.fullyContains(this)){
 				results.add(this);
+				System.out.println("ADDING");
 			}
 		}else{
 			//Subtree we need to redefine our bounding region bRegion
@@ -697,9 +698,11 @@ public class DangerNode{
 				if(sRegion.fullyContains(bRegion)){
 					//We are in the region so we report ourselves
 					results.add(this);
+					System.out.println("ADDING");
 				}else{
 					if(sRegion.fullyContains(this)){
 						results.add(this);
+						System.out.println("ADDING");
 					}
 				}
 				
@@ -724,9 +727,11 @@ public class DangerNode{
 				if(sRegion.fullyContains(bRegion)){
 					//We are in the region so we report ourselves
 					results.add(this);
+					System.out.println("ADDING");
 				}else{
 					if(sRegion.fullyContains(this)){
 						results.add(this);
+						System.out.println("ADDING");
 					}
 				}
 				if(sRegion.intersects(bRegion)){
