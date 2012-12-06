@@ -616,8 +616,8 @@ public class DangerNode{
 		double phi = lon;
 		double left = theta - (radius/Region.EARTH_RADIUS)*(180/Region.PI);
 		double right = theta + (radius/Region.EARTH_RADIUS)*(180/Region.PI);
-		double top = phi + (radius/(Region.EARTH_RADIUS*Math.cos(theta)))*(180/Region.PI);
-		double bottom = phi - (radius/(Region.EARTH_RADIUS*Math.cos(theta)))*(180/Region.PI);
+		double top = phi + (radius/(Region.EARTH_RADIUS*Math.cos(theta*(180/Region.PI))))*(180/Region.PI);
+		double bottom = phi - (radius/(Region.EARTH_RADIUS*Math.cos(theta*(180/Region.PI))))*(180/Region.PI);
 		return new Region(left,right,top,bottom);
 	}
 
