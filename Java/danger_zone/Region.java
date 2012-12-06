@@ -35,22 +35,26 @@ public class Region{
 	*/
 	public Region setLeft(double left){
 		this.xleft = left;
-		return this;
+		Region copy = new Region(left,xright,ytop,ybottom);
+		return copy;
 	}
 
 	public Region setRight(double right){
 		this.xright = right;
-		return this;
+		Region copy = new Region(xleft,right,ytop,ybottom);
+		return copy;
 	}
 
 	public Region setTop(double top){
 		this.ytop = top;
-		return this;
+		Region copy = new Region(xleft,xright,top,ybottom);
+		return copy;
 	}
 
 	public Region setBottom(double bottom){
 		this.ybottom = bottom;
-		return this;
+		Region copy = new Region(xleft,xright,ytop,bottom);
+		return copy;
 	}
 
 	/**
