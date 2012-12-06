@@ -649,14 +649,11 @@ public class DangerNode{
 		
 		Region searchRegion = convertGeoPoint(lat,lon,radius);//convertGeoPoint(lat,lon,radius);
 		ArrayList<DangerNode> results = new ArrayList<DangerNode>();
-		System.out.println(searchRegion);
 		if(searchRegion.xright >= 180){
 			//We need to split the region
 			Region leftHalf = new Region(searchRegion.xleft, 180, searchRegion.ytop,searchRegion.ybottom);
-			System.out.println("LEFTHALF: " + leftHalf);
 			results = innerBoundedSearch(leftHalf,results,0,new Region());
 			Region rightHalf = new Region(-180, searchRegion.xright - 360 , searchRegion.ytop,searchRegion.ybottom);
-			System.out.println("RIGHTHALF: " + rightHalf);
 			results = innerBoundedSearch(rightHalf,results,0,new Region());
 			return results;
 
@@ -664,10 +661,8 @@ public class DangerNode{
 			//Need to split
 			Region leftHalf = new Region(-180,searchRegion.xright,searchRegion.ytop,searchRegion.ybottom);
 			results = innerBoundedSearch(leftHalf,results,0,new Region());
-			System.out.println("LEFTHALF: " + leftHalf);
 			Region rightHalf = new Region(searchRegion.xleft + 360, 180,searchRegion.ytop,searchRegion.ybottom);
 			results = innerBoundedSearch(rightHalf,results,0,new Region());
-			System.out.println("RIGHTHALF: " + rightHalf);
 			return results;
 		}
 
@@ -684,8 +679,6 @@ public class DangerNode{
 	*/
 	private ArrayList<DangerNode> innerBoundedSearch(Region sRegion,ArrayList<DangerNode> results,int depth,Region bRegion){
 		int axis = depth % coordinates.length;
-		System.out.println(this.getLongitude() + " "+ this.getLatitude());
-		System.out.println(bRegion);
 		Region hack = new Region(bRegion.xleft,bRegion.xright,bRegion.ytop,bRegion.ybottom);
 		if(this.isLeaf()){
 			if(sRegion.fullyContains(this)){
