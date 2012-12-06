@@ -685,11 +685,11 @@ public class DangerNode{
 	private ArrayList<DangerNode> innerBoundedSearch(Region sRegion,ArrayList<DangerNode> results,int depth,Region bRegion){
 		int axis = depth % coordinates.length;
 		System.out.println(this.getLongitude() + " "+ this.getLatitude());
+		System.out.println(bRegion);
 		Region hack = new Region(bRegion.xleft,bRegion.xright,bRegion.ytop,bRegion.ybottom);
 		if(this.isLeaf()){
 			if(sRegion.fullyContains(this)){
 				results.add(this);
-				System.out.println("ADDING");
 			}
 		}else{
 			//Subtree we need to redefine our bounding region bRegion
@@ -698,17 +698,14 @@ public class DangerNode{
 				if(sRegion.fullyContains(bRegion)){
 					//We are in the region so we report ourselves
 					results.add(this);
-					System.out.println("ADDING");
 				}else{
 					if(sRegion.fullyContains(this)){
 						results.add(this);
-						System.out.println("ADDING");
 					}
 				}
 				
 				if(sRegion.intersects(bRegion)){
 					if(this.left != null){
-						System.out.println("LEFT");
 						//Search down the left with our splitting line as a bound on the right
 						results = this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setRight(this.getCoordinate(axis)));
 					}
@@ -727,11 +724,9 @@ public class DangerNode{
 				if(sRegion.fullyContains(bRegion)){
 					//We are in the region so we report ourselves
 					results.add(this);
-					System.out.println("ADDING");
 				}else{
 					if(sRegion.fullyContains(this)){
 						results.add(this);
-						System.out.println("ADDING");
 					}
 				}
 				if(sRegion.intersects(bRegion)){
