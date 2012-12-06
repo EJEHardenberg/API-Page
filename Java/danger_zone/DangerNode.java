@@ -703,6 +703,7 @@ public class DangerNode{
 				}
 				if(sRegion.intersects(bRegion)){
 					if(this.left != null){
+						System.out.println("LEFT");
 						//Search down the left with our splitting line as a bound on the right
 						results = this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setRight(this.getCoordinate(axis)));
 					}
@@ -725,6 +726,7 @@ public class DangerNode{
 				}
 				if(sRegion.intersects(bRegion)){
 					if(this.left != null){
+						System.out.println("LEFT");
 						//Search down the left with our splitting line as a bound on the right
 						results = this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setTop(this.getCoordinate(axis)));
 					}
