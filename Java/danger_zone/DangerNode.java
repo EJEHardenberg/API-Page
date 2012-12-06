@@ -579,7 +579,7 @@ public class DangerNode{
 				id = rs.getInt("pk_id");
 				tStamp = rs.getLong("fld_time_stamp");
 				//Create a DangerNode from this data
-				DangerNode node = new DangerNode(longitude,latitude,id,tStamp);
+				DangerNode node = new DangerNode(latitude,longitude,id,tStamp);
 				//Append this node to the ArrayList<DangerNode>
 				fetchedList.add(node);
 			}//end while
