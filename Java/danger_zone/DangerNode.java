@@ -684,7 +684,7 @@ public class DangerNode{
 	*/
 	private ArrayList<DangerNode> innerBoundedSearch(Region sRegion,ArrayList<DangerNode> results,int depth,Region bRegion){
 		int axis = depth % coordinates.length;
-		System.out.println(this.getLongitude() + " "+ this.getCoordinate());
+		System.out.println(this.getLongitude() + " "+ this.getLatitude());
 		if(this.isLeaf()){
 			if(sRegion.fullyContains(this)){
 				results.add(this);
@@ -704,16 +704,13 @@ public class DangerNode{
 				if(sRegion.intersects(bRegion)){
 					if(this.left != null){
 						//Search down the left with our splitting line as a bound on the right
-						return this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setRight(this.getCoordinate(axis)));
-					}else{
-						//Null link return results
-						return results;
+						results = this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setRight(this.getCoordinate(axis)));
 					}
 				}
 				if(sRegion.intersects(bRegion)){
 					if(this.right != null){
 						//Search down the left with a splitting line as a bound on the left
-						return this.right.innerBoundedSearch(sRegion,results,depth+1,bRegion.setLeft(this.getCoordinate(axis)));
+						results = this.right.innerBoundedSearch(sRegion,results,depth+1,bRegion.setLeft(this.getCoordinate(axis)));
 					}
 				}
 			}else{
@@ -729,16 +726,13 @@ public class DangerNode{
 				if(sRegion.intersects(bRegion)){
 					if(this.left != null){
 						//Search down the left with our splitting line as a bound on the right
-						return this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setTop(this.getCoordinate(axis)));
-					}else{
-						//Null link return results
-						return results;
+						results = this.left.innerBoundedSearch(sRegion,results,depth+1,bRegion.setTop(this.getCoordinate(axis)));
 					}
 				}
 				if(sRegion.intersects(bRegion)){
 					if(this.right != null){
 						//Search down the left with a splitting line as a bound on the left
-						return this.right.innerBoundedSearch(sRegion,results,depth+1,bRegion.setBottom(this.getCoordinate(axis)));
+						results = this.right.innerBoundedSearch(sRegion,results,depth+1,bRegion.setBottom(this.getCoordinate(axis)));
 					}
 				}
 			}
